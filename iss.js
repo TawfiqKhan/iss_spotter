@@ -50,4 +50,23 @@ const fetchIssCords = function(coords, callback) {
   });
 };
 
-module.exports = { fetchMyIp, fetchCoordsByIp, fetchIssCords };
+
+const nextISSTimesForMyLocation = function(callback) {
+  fetchMyIp((err, ip) => {
+    if (err) {
+      return callback(err, null);
+    }
+    fetchCoordsByIp(ip, (err, coords) => {
+      if (err) {
+        return callback(err, null);
+      }
+      fetchIssCords(coords, (err, passes) => {
+        if (err) {
+          return callback(err, null);
+        }
+        callback(null, passes);
+      });
+    });
+  });
+};
+module.exports = { nextISSTimesForMyLocation };
